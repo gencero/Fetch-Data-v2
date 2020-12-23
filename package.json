@@ -1,0 +1,37 @@
+{
+  "name": "fetch-data",
+  "version": "1.0.0",
+  "description": "",
+  "main": "example.js",
+  "scripts": {
+    "server": "nodemon server.js",
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "chalk": "^4.0.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "fs": "0.0.1-security",
+    "microtime": "^3.0.0",
+    "moment": "^2.26.0",
+    "moment-timezone": "^0.5.31",
+    "mongoose": "^5.11.8",
+    "mongoose-double": "0.0.1",
+    "node-cron": "^2.0.3",
+    "node-uuid": "^1.4.8",
+    "pg": "^8.5.1",
+    "pm2": "^4.4.0",
+    "request": "^2.88.2",
+    "web3": "^1.2.9",
+    "winston": "^3.3.3",
+    "winston-daily-rotate-file": "^4.5.0",
+    "winston-mongodb": "^5.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
