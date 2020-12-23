@@ -1,13 +1,12 @@
 const pool = require("../DB/Connection2");
 const logger = require("../logger");
 
-async function kucoin_upsert(guid, idexSchemas) {
-//const kucoin_upsert = (guid, marketsSchemas) => {
+async function kucoin_upsert(guid, marketsSchemas) {
   logger.log('info', `${guid} | ${new Date().toISOString()} | KUCOIN Upsert started`);
 
   const query = `
   insert into pairinfos
-  select *
+  select _id, base, contractaddress, market, parity, buy, caprazbuy, caprazsell, hambuy, hamsell, sell, to_timestamp('${Date.now()/1000}') as updatedate
   from json_populate_recordset(
     null::pairinfos,
     '${JSON.stringify(marketsSchemas)}'

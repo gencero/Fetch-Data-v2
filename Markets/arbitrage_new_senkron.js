@@ -2,7 +2,12 @@ const arbitrage_new = require("./arbitrage_new.js");
 const arbitrage_upsert = require("./arbitrage_upsert.js");
 var uuid = require("node-uuid");
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 async function getArbitrageNewSenkron() {
+  await sleep(5000);
   await infinite(); 
 }
   

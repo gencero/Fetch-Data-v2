@@ -2,15 +2,14 @@ const pool = require("../DB/Connection2");
 const logger = require("../logger");
 
 async function idex_upsert(guid, idexSchemas) {
-//const idex_upsert = (guid, idexSchemas) => {
   logger.log('info', `${guid} | ${new Date().toISOString()} | IDEX Upsert started`);
 
   const query = `
   insert into pairinfos
-  select *
+  select _id, base, contractaddress, market, parity, buy, caprazbuy, caprazsell, hambuy, hamsell, sell, to_timestamp('${Date.now()/1000}') as updatedate
   from json_populate_recordset(
     null::pairinfos,
-    '${JSON.stringify(marketsSchemas)}'
+    '${JSON.stringify(idexSchemas)}'
   )
   ON CONFLICT (market,parity,base,contractaddress)
   DO 

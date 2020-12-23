@@ -53,7 +53,6 @@ async function getUniswap3_Block(){
           }else{
             var exchangeUrl = result.rows[0].exchangeurl;
             var active = result.rows[0].active;
-            console.log("active: " + active + " - exchangeUrl: " + exchangeUrl);
 
             if (active == true) {
               var guid = await uuid.v1();  

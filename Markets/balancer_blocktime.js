@@ -3,6 +3,7 @@ const getBalancerData = require("./balancer.js");
 const balancer_upsert = require("./balancer_upsert.js");
 const logger = require("../logger");
 var uuid = require("node-uuid");
+const pool = require("../DB/Connection2");
 
 async function getBalancer_Block(){
   let wssUrl = "";

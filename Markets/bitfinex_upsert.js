@@ -7,7 +7,7 @@ async function bitfinex_upsert(guid, marketsSchemas) {
 
   const query = `
   insert into pairinfos
-  select *
+  select _id, base, contractaddress, market, parity, buy, caprazbuy, caprazsell, hambuy, hamsell, sell, to_timestamp('${Date.now()/1000}') as updatedate
   from json_populate_recordset(
     null::pairinfos,
     '${JSON.stringify(marketsSchemas)}'
@@ -23,14 +23,14 @@ async function bitfinex_upsert(guid, marketsSchemas) {
                 contractaddress= EXCLUDED.contractaddress,
                 updatedate = to_timestamp('${Date.now()/1000}');`;
 
-  const client = await pool.connect();
-  const response = await client.query(query, (err, result) => {
+  //const client = await pool.connect();
+  const response = await pool.query(query, (err, result) => {
     if (err){
       console.log(err);
       logger.log('info', `${guid} | ${new Date().toISOString()} | BITFINEX Upsert ERROR: ${err}` );
     }
   });
-  client.release();  
+  //client.release();  
   logger.log('info', `${guid} | ${new Date().toISOString()} | BITFINEX Upsert ended`);
 };
 

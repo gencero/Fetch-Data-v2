@@ -3,9 +3,6 @@ const toFixed = require("../Util/toFixed");
 var uuid = require("node-uuid");
 const logger = require("../logger");
 
-//const url = "http://het.freemyip.com:3005/balancer";
-//const url = "http://138.201.32.165:3005/balancer";
-
 async function getBalancerData(guid, url) {
   try {
   logger.log('info', `${guid} | ${new Date().toISOString()} | BALANCER started`);
@@ -45,7 +42,6 @@ async function getBalancerData(guid, url) {
                 var highestBid = 1 / tokenToEthPrice;
               }
 
-              //balancerSchema = new PairInfo();
               balancerSchema = {};
               balancerSchema._id = uuid.v1();
               balancerSchema.parity = res[i].symbol.toUpperCase()  + "ETH";

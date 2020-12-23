@@ -2,6 +2,7 @@ const axios = require("axios");
 const toFixed = require("../Util/toFixed");
 var uuid = require("node-uuid");
 const logger = require("../logger");
+const pg = require("pg");
 
 //const url = "http://het.freemyip.com:3005/uniswap2";
 //const url = "http://138.201.32.165:3005/uniswap2";
@@ -70,7 +71,6 @@ async function getUniswap3Data(guid, url) {
               }
             }
           }
-          
           resolve(uniswap3Schemas);
         })
         .catch((error) => {

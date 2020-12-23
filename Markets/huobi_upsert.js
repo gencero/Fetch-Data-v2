@@ -7,7 +7,7 @@ async function huobi_upsert(guid, marketsSchemas) {
 
   const query = `
   insert into pairinfos
-  select *
+  select _id, base, contractaddress, market, parity, buy, caprazbuy, caprazsell, hambuy, hamsell, sell, to_timestamp('${Date.now()/1000}') as updatedate
   from json_populate_recordset(
     null::pairinfos,
     '${JSON.stringify(marketsSchemas)}'
