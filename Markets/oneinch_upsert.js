@@ -35,16 +35,16 @@ async function oneinch_upsert(marketsSchemas, guid) {
                                HAVING count(*)>1)
                 AND market = '1inch'`;
 
-  const client = await pool.connect();
-  const response = await client.query(query1, async(err, result) => {
+  //const client = await pool.connect();
+  const response = await pool.query(query1, async(err, result) => {
     if (err){
-      client.release();  
+      //client.release();  
       console.log(err);
       logger.log('info', `${guid} | ${new Date().toISOString()} | 1INCH Upsert 1 ERROR: ${err}` );
     }else{
-      const response2 = await client.query(query2, async(err, result2) => {
+      const response2 = await pool.query(query2, async(err, result2) => {
         if (err){
-          client.release();  
+          //client.release();  
           console.log(err);
           logger.log('info', `${guid} | ${new Date().toISOString()} | 1INCH Upsert 2 ERROR: ${err}` );
         }
@@ -52,7 +52,7 @@ async function oneinch_upsert(marketsSchemas, guid) {
     }
   });
 
-  client.release();  
+  //client.release();  
   logger.log('info', `${guid} | ${new Date().toISOString()} | 1INCH ended`);
 };
 

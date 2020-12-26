@@ -13,8 +13,8 @@ async function getSushiswap_Block(){
                         END AS wssurl
                   FROM runningexchanges WHERE market = 'Sushiswap' `;
     
-    const client = await pool.connect();
-    const response = await client.query(query, async (err, result) => {
+    //const client = await pool.connect();
+    const response = await pool.query(query, async (err, result) => {
       if (err){
         console.log(err);
         logger.log('info', `${guid} | ${new Date().toISOString()} | SUSHISWAP Upsert ERROR: ${err}` );
@@ -29,7 +29,7 @@ async function getSushiswap_Block(){
 
     });
 
-    client.release();   
+    //client.release();   
   
     async function fetch(guid, urlSushiswap) {
         var result = await getSushiSwapData(guid, urlSushiswap);
@@ -45,8 +45,8 @@ async function getSushiswap_Block(){
                      FROM runningexchanges 
                     WHERE market = 'Sushiswap' `;
 
-      const client = await pool.connect();
-      const response = await client.query(query, async (err, result) => {
+      //const client = await pool.connect();
+      const response = await pool.query(query, async (err, result) => {
         if (err){
           console.log(err);
           logger.log('info', `${guid} | ${new Date().toISOString()} | SUSHISWAP Upsert ERROR: ${err}` );
@@ -63,7 +63,7 @@ async function getSushiswap_Block(){
           }
         }
       });
-      client.release();   
+      //client.release();   
     }
 }
 

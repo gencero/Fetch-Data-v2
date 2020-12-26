@@ -13,8 +13,8 @@ async function getUniswap1_Block(){
                         END AS wssurl
                   FROM runningexchanges WHERE market = 'Uniswap-1' `;
     
-    const client = await pool.connect();
-    const response = await client.query(query, async (err, result) => {
+    //const client = await pool.connect();
+    const response = await pool.query(query, async (err, result) => {
       if (err){
         console.log(err);
         logger.log('info', `${guid} | ${new Date().toISOString()} | UNISWAP-1 Upsert ERROR: ${err}` );
@@ -29,7 +29,7 @@ async function getUniswap1_Block(){
 
     });
 
-    client.release();   
+    //client.release();   
   
     async function fetch(guid, urlUniswap1) {
         var result = await getUniswap1Data(guid, urlUniswap1);
@@ -45,8 +45,8 @@ async function getUniswap1_Block(){
                       FROM runningexchanges 
                      WHERE market = 'Uniswap-1' `;
 
-        const client = await pool.connect();
-        const response = await client.query(query, async (err, result) => {
+        //const client = await pool.connect();
+        const response = await pool.query(query, async (err, result) => {
           if (err){
             console.log(err);
             logger.log('info', `${guid} | ${new Date().toISOString()} | UNISWAP-1 Upsert ERROR: ${err}` );
@@ -63,7 +63,7 @@ async function getUniswap1_Block(){
             }
           }
         });
-        client.release();   
+        //client.release();   
     }
 }
 

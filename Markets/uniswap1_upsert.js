@@ -34,16 +34,16 @@ async function uniswap1_upsert(marketsSchemas, guid) {
                                 GROUP by parity 
                                HAVING count(*)>1)
                 AND market = 'Uniswap-1'`;
-  const client = await pool.connect();
-  const response = await client.query(query1, async(err, result) => {
+  //const client = await pool.connect();
+  const response = await pool.query(query1, async(err, result) => {
     if (err){
-      client.release();  
+      //client.release();  
       console.log(err);
       logger.log('info', `${guid} | ${new Date().toISOString()} | UNISWAP-1 Upsert 1 ERROR: ${err}` );
     }else{
-      const response2 = await client.query(query2, async(err, result2) => {
+      const response2 = await pool.query(query2, async(err, result2) => {
         if (err){
-          client.release();  
+          //client.release();  
           console.log(err);
           logger.log('info', `${guid} | ${new Date().toISOString()} | UNISWAP-1 Upsert 2 ERROR: ${err}` );
         }
@@ -51,7 +51,7 @@ async function uniswap1_upsert(marketsSchemas, guid) {
     }
   });
 
-  client.release();  
+  //client.release();  
   logger.log('info', `${guid} | ${new Date().toISOString()} | UNISWAP-1 ended`);
 };
 
