@@ -9,7 +9,7 @@ const getBitfinexData = (guid) => {
   logger.log('info', `${guid} | ${new Date().toISOString()} | BITFINEX started`);
   return new Promise((resolve, reject) => {
     axios
-      .get(url, { timeout: 1750 })
+      .get(url, { timeout: 900 })
       .then((response) => {
         var res = response.data.map(function (item) {
           return item;

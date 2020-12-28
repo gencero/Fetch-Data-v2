@@ -10,7 +10,7 @@ const getBittrexNewData = (guid) => {
   logger.log('info', `${guid} | ${new Date().toISOString()} | BITTREX started`);
   return new Promise((resolve, reject) => {
     axios
-      .get(url, { timeout: 1750 })
+      .get(url, { timeout: 900 })
       .then((response) => {
         var res = response.data.result.map(({ MarketName, Bid, Ask }) => ({
           MarketName,

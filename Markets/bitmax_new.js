@@ -9,7 +9,7 @@ const getBitmaxNewData = (guid) => {
   logger.log('info', `${guid} | ${new Date().toISOString()} | BITMAX started`);
   return new Promise((resolve, reject) => {
     axios
-      .get(url, { timeout: 1750 })
+      .get(url, { timeout: 1100 })
       .then((response) => {
         var res = response.data.data.map(({ symbol, ask, bid }) => ({
           symbol,

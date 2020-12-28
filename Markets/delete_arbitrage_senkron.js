@@ -1,7 +1,7 @@
 const delete_arbitrage = require("./delete_arbitrage.js");
 
 async function deleteArbitrageSenkron (){
-    await setInterval(intervalfunction, 1*30*1000);
+    await setInterval(intervalfunction, 1*60*1000);
 }
 
 async function intervalfunction(){

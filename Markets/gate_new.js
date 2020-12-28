@@ -8,7 +8,7 @@ const getGateNewData = (guid) => {
   logger.log('info', `${guid} | ${new Date().toISOString()} | GATE started`);
   return new Promise((resolve, reject) => {
     axios
-      .get(url, { timeout: 2250 })
+      .get(url, { timeout: 1750 })
       .then((response) => {
         var obj = response.data;
         logger.log('info', `${guid} | ${new Date().toISOString()} | GATE response | data.length: ${Object.keys(obj).length}`);

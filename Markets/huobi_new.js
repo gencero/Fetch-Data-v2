@@ -8,7 +8,7 @@ const getHuobiNewData = (guid) => {
   logger.log('info', `${guid} | ${new Date().toISOString()} | HUOBI started`);
   return new Promise((resolve, reject) => {
     axios
-      .get(url , { timeout: 1750 })
+      .get(url , { timeout: 1000 })
       .then((response) => {
         var res = response.data.data.map(({ symbol, ask, bid }) => ({
           symbol,

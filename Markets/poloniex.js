@@ -10,7 +10,7 @@ const getPoloniexData = (guid) => {
   logger.log('info', `${guid} | ${new Date().toISOString()} | POLONIEX started`);
   return new Promise((resolve, reject) => {
     axios
-      .get(url, { timeout: 1750 })
+      .get(url, { timeout: 900 })
       .then((response) => {
         var obj = response.data;
 

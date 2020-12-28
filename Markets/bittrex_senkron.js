@@ -4,7 +4,7 @@ var uuid = require("node-uuid");
 const logger = require("../logger");
 
 async function getBittrexSenkron (){
-    await setInterval(intervalfunction, 2000);
+    await setInterval(intervalfunction, 1000);
 }
 
 async function intervalfunction(){

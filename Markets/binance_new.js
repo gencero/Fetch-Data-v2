@@ -9,7 +9,7 @@ const getBinanceNewData = (guid) => {
   logger.log('info', `${guid} | ${new Date().toISOString()} | BINANCE started`);
   return new Promise((resolve, reject) => {
     axios
-      .get(url, { timeout: 1750 })
+      .get(url, { timeout: 1200 })
       .then((response) => {
         var res = response.data.map(({ symbol, askPrice, bidPrice }) => ({
           symbol,

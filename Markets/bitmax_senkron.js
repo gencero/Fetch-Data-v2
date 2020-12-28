@@ -4,7 +4,7 @@ var uuid = require("node-uuid");
 const logger = require("../logger");
 
 async function getBitmaxSenkron (){
-     await setInterval(intervalfunction, 2000);
+     await setInterval(intervalfunction, 1200);
 }
 
 async function intervalfunction(){

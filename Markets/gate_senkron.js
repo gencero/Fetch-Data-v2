@@ -4,7 +4,7 @@ var uuid = require("node-uuid");
 const logger = require("../logger");
 
 async function getGateSenkron (){
-    await setInterval(intervalfunction, 2500);
+    await setInterval(intervalfunction, 2000);
 }
 
 async function intervalfunction(){
