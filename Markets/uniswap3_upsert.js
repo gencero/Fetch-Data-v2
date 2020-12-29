@@ -41,14 +41,14 @@ var query2 = `UPDATE pairinfos
       //client.release(); 
       console.log(err);
       logger.log('info', `${guid} | ${new Date().toISOString()} | UNISWAP-3 Upsert 1 ERROR: ${err}` );
-    }else{
-      const response2 = await pool.query(query2, (err, result2) => {
-        if (err){
-          //client.release(); 
-          console.log(err);
-          logger.log('info', `${guid} | ${new Date().toISOString()} | UNISWAP-3 Upsert 2 ERROR: ${err}` ); 
-        }
-      });
+    }  
+  });
+
+  const response2 = await pool.query(query2, (err, result2) => {
+    if (err){
+      //client.release(); 
+      console.log(err);
+      logger.log('info', `${guid} | ${new Date().toISOString()} | UNISWAP-3 Upsert 2 ERROR: ${err}` ); 
     }
   });
 
