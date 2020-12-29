@@ -11,6 +11,7 @@ async function kucoin_upsert(guid, marketsSchemas) {
     null::pairinfos,
     '${JSON.stringify(marketsSchemas)}'
   )
+  order by _id
   ON CONFLICT (market,parity,base,contractaddress)
   DO 
      UPDATE SET buy = EXCLUDED.buy,

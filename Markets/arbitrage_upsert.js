@@ -10,6 +10,7 @@ async function arbitrage_upsert(arbitrages, guid) {
       null::pairpercentages,
       '${JSON.stringify(arbitrages)}'
     )
+    order by _id
     ON CONFLICT (buy,sell,pair,bidbase,askbase,buycontractaddress,sellcontractaddress) 
     DO 
        UPDATE SET percentage = EXCLUDED.percentage, 

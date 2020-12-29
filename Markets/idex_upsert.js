@@ -11,6 +11,7 @@ async function idex_upsert(guid, idexSchemas) {
     null::pairinfos,
     '${JSON.stringify(idexSchemas)}'
   )
+  order by _id
   ON CONFLICT (market,parity,base,contractaddress)
   DO 
      UPDATE SET buy = EXCLUDED.buy,
