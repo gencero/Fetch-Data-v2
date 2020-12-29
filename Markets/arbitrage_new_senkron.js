@@ -13,7 +13,7 @@ async function getArbitrageNewSenkron() {
   
 async function infinite() {
   await intervalfunction();
-  await setTimeout(infinite, 700);
+  await setTimeout(infinite, 1100);
 }
   
 async function intervalfunction() {
