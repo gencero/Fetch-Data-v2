@@ -15,7 +15,7 @@ async function uniswap3_upsert(marketsSchemas, guid) {
       )
     )x where x.rownum = 1
   )y
-  order by y.market, y.parity, y.base, y.contractaddress
+  order by y.parity
   ON CONFLICT (market,parity,base,contractaddress) WHERE updatedate > now() - interval '90 seconds' 
   DO 
      UPDATE SET buy = EXCLUDED.buy,
@@ -27,14 +27,14 @@ async function uniswap3_upsert(marketsSchemas, guid) {
                 contractaddress= EXCLUDED.contractaddress,
                 updatedate = to_timestamp('${Date.now()/1000}');`;
 
-var query2 = `UPDATE pairinfos 
-                SET multiple = true
-              WHERE parity IN (SELECT parity 
-                                 FROM pairinfos 
-                                WHERE market = 'Uniswap-3' 
-                                GROUP by parity 
-                               HAVING count(*)>1)
-                AND market = 'Uniswap-3'`; 
+// var query2 = `UPDATE pairinfos 
+//                 SET multiple = true
+//               WHERE parity IN (SELECT parity 
+//                                  FROM pairinfos 
+//                                 WHERE market = 'Uniswap-3' 
+//                                 GROUP by parity 
+//                                HAVING count(*)>1)
+//                 AND market = 'Uniswap-3'`; 
   //const client = await pool.connect();
   const response = await pool.query(query1, async(err, result) => {
     if (err){
@@ -44,13 +44,13 @@ var query2 = `UPDATE pairinfos
     }  
   });
 
-  const response2 = await pool.query(query2, (err, result2) => {
-    if (err){
-      //client.release(); 
-      console.log(err);
-      logger.log('info', `${guid} | ${new Date().toISOString()} | UNISWAP-3 Upsert 2 ERROR: ${err}` ); 
-    }
-  });
+  // const response2 = await pool.query(query2, (err, result2) => {
+  //   if (err){
+  //     //client.release(); 
+  //     console.log(err);
+  //     logger.log('info', `${guid} | ${new Date().toISOString()} | UNISWAP-3 Upsert 2 ERROR: ${err}` ); 
+  //   }
+  // });
 
   //client.release();  
   logger.log('info', `${guid} | ${new Date().toISOString()} | UNISWAP-3 ended`);
