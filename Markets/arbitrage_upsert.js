@@ -10,8 +10,8 @@ async function arbitrage_upsert(arbitrages, guid) {
       null::pairpercentages,
       '${JSON.stringify(arbitrages)}'
     )
-    order by _id
-    ON CONFLICT (buy,sell,pair,bidbase,askbase,buycontractaddress,sellcontractaddress) 
+    order by buy,sell,pair,bidbase,askbase,buycontractaddress,sellcontractaddress
+    ON CONFLICT (buy,sell,pair,bidbase,askbase,buycontractaddress,sellcontractaddress) WHERE updatedate > now() - interval '90 seconds' 
     DO 
        UPDATE SET percentage = EXCLUDED.percentage, 
                   ask = EXCLUDED.ask,

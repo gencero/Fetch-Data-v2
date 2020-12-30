@@ -15,8 +15,8 @@ async function uniswap3_upsert(marketsSchemas, guid) {
       )
     )x where x.rownum = 1
   )y
-  order by y._id
-  ON CONFLICT (market,parity,base,contractaddress)
+  order by y.market, y.parity, y.base, y.contractaddress
+  ON CONFLICT (market,parity,base,contractaddress) WHERE updatedate > now() - interval '90 seconds' 
   DO 
      UPDATE SET buy = EXCLUDED.buy,
                 sell= EXCLUDED.sell,
