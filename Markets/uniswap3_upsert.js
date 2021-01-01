@@ -6,8 +6,14 @@ async function uniswap3_upsert(marketsSchemas, guid) {
 
   const query1 = `
   insert into pairinfos
-  select y._id, y.base, y.contractaddress, y.market, y.parity, y.buy, y.caprazbuy, y.caprazsell, y.hambuy, y.hamsell, y.sell, to_timestamp('${Date.now()/1000}') as updatedate  from (
-    select x.* from (
+  select y._id, y.base, y.contractaddress, y.market, y.parity, y.buy, y.caprazbuy, y.caprazsell, y.hambuy, y.hamsell, y.sell, 
+         to_timestamp('${Date.now()/1000}') as updatedate, 
+         CASE
+           WHEN y.parity_count>1 THEN true
+           ELSE false
+         END AS multiple 
+    from (
+    select x.*, COUNT(*) over(partition by x.parity order by 1) as parity_count from (
       select *, row_number() over(partition by market, parity, base, contractaddress, buy, sell, hambuy, hamsell, caprazbuy, caprazsell order by 1) as rownum
       from json_populate_recordset(
         null::pairinfos,
@@ -25,16 +31,17 @@ async function uniswap3_upsert(marketsSchemas, guid) {
                 caprazbuy = EXCLUDED.caprazbuy,
                 caprazsell= EXCLUDED.caprazsell,
                 contractaddress= EXCLUDED.contractaddress,
-                updatedate = to_timestamp('${Date.now()/1000}');`;
+                updatedate = to_timestamp('${Date.now()/1000}'),
+                multiple = EXCLUDED.multiple;`;
 
-var query2 = `UPDATE pairinfos 
-                SET multiple = true
-              WHERE parity IN (SELECT parity 
-                                 FROM pairinfos 
-                                WHERE market = 'Uniswap-3' 
-                                GROUP by parity 
-                               HAVING count(*)>1)
-                AND market = 'Uniswap-3'`; 
+// var query2 = `UPDATE pairinfos 
+//                 SET multiple = true
+//               WHERE parity IN (SELECT parity 
+//                                  FROM pairinfos 
+//                                 WHERE market = 'Uniswap-3' 
+//                                 GROUP by parity 
+//                                HAVING count(*)>1)
+//                 AND market = 'Uniswap-3'`; 
   //const client = await pool.connect();
   const response = await pool.query(query1, async(err, result) => {
     if (err){
@@ -44,13 +51,13 @@ var query2 = `UPDATE pairinfos
     }  
   });
 
-  const response2 = await pool.query(query2, (err, result2) => {
-    if (err){
-      //client.release(); 
-      console.log(err);
-      logger.log('info', `${guid} | ${new Date().toISOString()} | UNISWAP-3 Upsert 2 ERROR: ${err}` ); 
-    }
-  });
+  // const response2 = await pool.query(query2, (err, result2) => {
+  //   if (err){
+  //     //client.release(); 
+  //     console.log(err);
+  //     logger.log('info', `${guid} | ${new Date().toISOString()} | UNISWAP-3 Upsert 2 ERROR: ${err}` ); 
+  //   }
+  // });
 
   //client.release();  
   logger.log('info', `${guid} | ${new Date().toISOString()} | UNISWAP-3 ended`);
