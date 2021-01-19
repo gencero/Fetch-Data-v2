@@ -32,10 +32,12 @@ async function arbitrage_new(guid) {
                 if (
                   !(
                     (
-                      isNaN(groupedByPair.details[i].sell) ||
+                      isNaN(groupedByPair.details[j].sell) ||
                       isNaN(groupedByPair.details[i].buy) ||
-                      toFixed(groupedByPair.details[i].buy) == 0 ||
-                      toFixed(groupedByPair.details[j].sell) == 0
+                      groupedByPair.details[i].buy == 0 ||
+                      groupedByPair.details[j].sell == 0 ||
+                      (!groupedByPair.details[i].buy) ||
+                      (!groupedByPair.details[j].sell)
                     )
                   )
                 ) {
