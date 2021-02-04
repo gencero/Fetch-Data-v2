@@ -9,7 +9,8 @@ async function getBalancer_Block(){
   let wssUrl = "";
   var query = `SELECT CASE
                         WHEN linkselect='1' THEN wsslink_1
-                        ELSE wsslink_2
+                        WHEN linkselect='2' THEN wsslink_2
+                        ELSE wsslink_3
                       END AS wssurl
                 FROM runningexchanges WHERE market = 'Balancer' `;
   
@@ -39,7 +40,8 @@ async function getBalancer_Block(){
   async function fetchData(block) {
     var query = `SELECT CASE
                           WHEN linkselect='1' THEN link_1
-                          ELSE link_2
+                          WHEN linkselect='2' THEN link_2
+                          ELSE link_3
                         END AS exchangeurl,
                         active
                    FROM runningexchanges 
