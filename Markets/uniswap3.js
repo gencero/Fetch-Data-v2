@@ -30,7 +30,7 @@ async function getUniswap3Data(guid, url) {
           var uniswap3Schema, uniswap3Schemas = [];
           var ethToTokenPrice, tokenToEthPrice;
           for (i in res) {
-            if (res[i].ethToTokenPrice && res[i].tokenToEthPrice) {
+            if (res[i].ethToTokenPrice && res[i].tokenToEthPrice && !res[i].symbol.includes("'")) {
               if (
                 !(
                   res[i].ethToTokenPrice == null ||
