@@ -3,7 +3,8 @@ const toFixed = require("../Util/toFixed");
 var uuid = require("node-uuid");
 const logger = require("../logger");
 
-const url = "https://bitmax.io/api/pro/v1/ticker";
+//const url = "https://bitmax.io/api/pro/v1/ticker";
+const url = "https://ascendex.com/api/pro/v1/ticker";
 
 const getBitmaxNewData = (guid) => {
   logger.log('info', `${guid} | ${new Date().toISOString()} | BITMAX started`);
