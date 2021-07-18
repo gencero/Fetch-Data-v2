@@ -5,7 +5,7 @@ var uuid = require("node-uuid");
 const delete_arbitrage = async () => {
   guid = uuid.v1();
   //var query1 = "Delete from pairpercentages where updatedate < now() - interval '120 seconds'";
-  var query1 = "DELETE FROM pairpercentages WHERE _id in (SELECT _id FROM pairpercentages where updatedate < now() - interval '120 seconds' FOR UPDATE NOWAIT)";
+  var query1 = "DELETE FROM pairpercentages WHERE _id in (SELECT _id FROM pairpercentages where updatedate < now() - interval '180 seconds' FOR UPDATE NOWAIT)";
 
   //const client = await pool.connect();
   const response1 = await pool.query(query1, (err1, result1) => {
@@ -17,7 +17,7 @@ const delete_arbitrage = async () => {
   logger.log("info", `${guid} | ${new Date().toISOString()} | POSTGRE removed PairPercentage data`);
 
   //var query2 = "Delete from pairinfos where updatedate < now() - interval '120 seconds'";
-  var query2 = "DELETE FROM pairinfos WHERE _id in (SELECT _id FROM pairinfos where updatedate < now() - interval '120 seconds' FOR UPDATE NOWAIT)";
+  var query2 = "DELETE FROM pairinfos WHERE _id in (SELECT _id FROM pairinfos where updatedate < now() - interval '240 seconds' FOR UPDATE NOWAIT)";
 
   const response2 = await pool.query(query2, (err2, result2) => {
     if (err2){
