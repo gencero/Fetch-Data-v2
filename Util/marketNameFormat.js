@@ -30,4 +30,12 @@ function poloNameFormat(str) {
   return str;
 }
 
-module.exports = {idexNameFormat, bittrexNameFormat, kucoinNameFormat, poloNameFormat};
+function ftxNameFormat(str) {
+  var n = str.indexOf("/");
+  var str2 = str.substr(0, n);
+  var str = str2 + "ETH";
+
+  return str;
+}
+
+module.exports = {idexNameFormat, bittrexNameFormat, kucoinNameFormat, poloNameFormat, ftxNameFormat};
