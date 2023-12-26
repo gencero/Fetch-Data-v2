@@ -22,36 +22,36 @@ const getArbitrageNewSenkron = require("./Markets/arbitrage_new_senkron.js");
 const deleteArbitrageSenkron = require("./Markets/delete_arbitrage_senkron.js");
 //const getPancakeNodeBlock = require("./Markets/pancake_node.js");
 
- getBinanceSenkron();
- getBittrexSenkron();
- //getIdexSenkron();
- getKucoinSenkron();
- getHuobiSenkron();
- getBitmaxSenkron();
- getGateSenkron();
- getOneinch_Block();
- getKyber_Block();
- getUniswap3_Block();
- getUniswap1_Block();
- getPoloniexSenkron();
- getBitfinexSenkron();
- getArbitrageNewSenkron();
- deleteArbitrageSenkron();
- getBalancer_Block();
- getSushiswap_Block();
- getFtxSenkron();
- //getPancakeNodeBlock();
+getBinanceSenkron();
+//getBittrexSenkron();
+//getIdexSenkron();
+//getKucoinSenkron(); ***
+//getHuobiSenkron(); ***
+//getBitmaxSenkron(); ***
+//getGateSenkron(); ***
+//getOneinch_Block();
+//getKyber_Block();
+//getUniswap3_Block();
+getUniswap1_Block();
+//getPoloniexSenkron();
+//getBitfinexSenkron();  ***
+//getArbitrageNewSenkron();
+//deleteArbitrageSenkron();
+//getBalancer_Block();
+//getSushiswap_Block();
+//getFtxSenkron();
+//getPancakeNodeBlock();
 
- //console.log('100' + Math.random().toString().slice(2,6));
+//console.log('100' + Math.random().toString().slice(2,6));
 
- //console.log("XX: " + Number(process.argv.splice(2)[0]));
- //console.log("YY: " + Math.round(Date.now()/1000)+60*20);
+//console.log("XX: " + Number(process.argv.splice(2)[0]));
+//console.log("YY: " + Math.round(Date.now()/1000)+60*20);
 //routes
-app.get('/', (req,res)=> {
-    res.send("We are on home");
+app.get("/", (req, res) => {
+  res.send("We are on home");
 });
 
-var server = app.listen(process.env.PORT || 5000, function (){
-    var port = server.address().port;
-    logger.log('info', `App now running on port: ${port}`);
+var server = app.listen(process.env.PORT || 5002, function () {
+  var port = server.address().port;
+  logger.log("info", `App now running on port: ${port}`);
 });

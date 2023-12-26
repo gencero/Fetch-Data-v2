@@ -9,7 +9,11 @@ const pg = require("pg");
 
 async function getUniswap3Data(guid, url) {
   try {
-    logger.log('info', `${guid} | ${new Date().toISOString()} | UNISWAP-3 started`);
+    logger.log(
+      "info",
+      `${guid} | ${new Date().toISOString()} | UNISWAP-3 started`
+    );
+    console.log("url: " + url);
     return new Promise((resolve, reject) => {
       axios
         .get(url, { timeout: 8000 })
@@ -23,14 +27,24 @@ async function getUniswap3Data(guid, url) {
             })
           );
 
-          logger.log('info', `${guid} | ${new Date().toISOString()} | UNISWAP-3 response | data.length: ${response.data.length}`);
+          logger.log(
+            "info",
+            `${guid} | ${new Date().toISOString()} | UNISWAP-3 response | data.length: ${
+              response.data.length
+            }`
+          );
           /**********************************************************************/
           //ETH olanları aldık.
           /**********************************************************************/
-          var uniswap3Schema, uniswap3Schemas = [];
+          var uniswap3Schema,
+            uniswap3Schemas = [];
           var ethToTokenPrice, tokenToEthPrice;
           for (i in res) {
-            if (res[i].ethToTokenPrice && res[i].tokenToEthPrice && !res[i].symbol.includes("'")) {
+            if (
+              res[i].ethToTokenPrice &&
+              res[i].tokenToEthPrice &&
+              !res[i].symbol.includes("'")
+            ) {
               if (
                 !(
                   res[i].ethToTokenPrice == null ||
@@ -38,7 +52,7 @@ async function getUniswap3Data(guid, url) {
                 )
               ) {
                 if (res[i].ethToTokenPrice < 0) {
-                  ethToTokenPrice = 0;//-1 * res[i].ethToTokenPrice;
+                  ethToTokenPrice = 0; //-1 * res[i].ethToTokenPrice;
                   var lowestAsk = 0;
                 } else {
                   ethToTokenPrice = res[i].ethToTokenPrice;
@@ -55,7 +69,7 @@ async function getUniswap3Data(guid, url) {
 
                 //uniswap3Schema = new PairInfo();
                 uniswap3Schema = {};
-                uniswap3Schema._id = uuid.v1(); 
+                uniswap3Schema._id = uuid.v1();
                 uniswap3Schema.parity = res[i].symbol.toUpperCase() + "ETH";
                 uniswap3Schema.buy = toFixed(lowestAsk);
                 uniswap3Schema.sell = toFixed(highestBid);
@@ -74,12 +88,18 @@ async function getUniswap3Data(guid, url) {
           resolve(uniswap3Schemas);
         })
         .catch((error) => {
-          logger.log('info', `${guid} | ${new Date().toISOString()} | UNISWAP-3 error | + ${error}`);
-          reject("XXXXX UNISWAP-3 ERR: " + error); 
+          logger.log(
+            "info",
+            `${guid} | ${new Date().toISOString()} | ORHAN UNISWAP-3 error | + ${error}`
+          );
+          reject("XXXXX UNISWAP-3 ERR: " + error);
         });
     });
   } catch (error) {
-    logger.log('info', `${guid} | ${new Date().toISOString()} | UNISWAP-3 error | + ${error}`);
+    logger.log(
+      "info",
+      `${guid} | ${new Date().toISOString()} | UNISWAP-3 error | + ${error}`
+    );
   }
 }
 
