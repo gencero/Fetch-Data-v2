@@ -25,18 +25,18 @@ const deleteArbitrageSenkron = require("./Markets/delete_arbitrage_senkron.js");
 getBinanceSenkron();
 //getBittrexSenkron();
 //getIdexSenkron();
-//getKucoinSenkron(); ***
-//getHuobiSenkron(); ***
-//getBitmaxSenkron(); ***
-//getGateSenkron(); ***
+getKucoinSenkron();
+getHuobiSenkron();
+getBitmaxSenkron();
+getGateSenkron();
 //getOneinch_Block();
 //getKyber_Block();
 //getUniswap3_Block();
 getUniswap1_Block();
 //getPoloniexSenkron();
-//getBitfinexSenkron();  ***
-//getArbitrageNewSenkron();
-//deleteArbitrageSenkron();
+getBitfinexSenkron();
+getArbitrageNewSenkron();
+deleteArbitrageSenkron();
 //getBalancer_Block();
 //getSushiswap_Block();
 //getFtxSenkron();
