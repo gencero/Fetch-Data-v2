@@ -37,7 +37,7 @@ getUniswap1_Block();
 getBitfinexSenkron();
 getArbitrageNewSenkron();
 deleteArbitrageSenkron();
-//getBalancer_Block();
+getBalancer_Block();
 //getSushiswap_Block();
 //getFtxSenkron();
 //getPancakeNodeBlock();
