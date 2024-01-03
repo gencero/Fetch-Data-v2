@@ -24,7 +24,7 @@ async function balancer_upsert(marketsSchemas, guid) {
       )
     )x where x.rownum = 1
   )y
-  order by y._id FOR UPDATE SKIP LOCKED
+  order by y._id
   ON CONFLICT (market,parity,base,contractaddress)
   DO 
      UPDATE SET buy = EXCLUDED.buy,
