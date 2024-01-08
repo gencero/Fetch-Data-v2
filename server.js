@@ -31,7 +31,7 @@ getBitmaxSenkron();
 getGateSenkron();
 getOneinch_Block();
 //getKyber_Block();
-//getUniswap3_Block();
+getUniswap3_Block();
 getUniswap1_Block();
 //getPoloniexSenkron();
 getBitfinexSenkron();
