@@ -6,7 +6,7 @@ const logger = require("../logger");
 const url = "https://api.binance.com/api/v3/ticker/bookTicker";
 
 const getBinanceNewData = (guid) => {
-  logger.log('info', `${guid} | ${new Date().toISOString()} | BINANCE started`);
+  logger.log("info", `${guid} | ${new Date().toISOString()} | BINANCE started`);
   return new Promise((resolve, reject) => {
     axios
       .get(url, { timeout: 1200 })
@@ -16,7 +16,12 @@ const getBinanceNewData = (guid) => {
           askPrice,
           bidPrice,
         }));
-        logger.log('info', `${guid} | ${new Date().toISOString()} | BINANCE response | data.length: ${response.data.length}`);
+        logger.log(
+          "info",
+          `${guid} | ${new Date().toISOString()} | BINANCE response | data.length: ${
+            response.data.length
+          }`
+        );
         /**********************************************************************/
         //ETH olanları aldık.
         /**********************************************************************/
@@ -26,9 +31,15 @@ const getBinanceNewData = (guid) => {
           }
         });
 
-        var binanceSchema,binanceSchemas = [];
+        var binanceSchema,
+          binanceSchemas = [];
         for (i in res_eth) {
-          if (res_eth[i].askPrice && res_eth[i].bidPrice) {
+          if (
+            res_eth[i].askPrice &&
+            res_eth[i].bidPrice &&
+            res_eth[i].askPrice > 0 &&
+            res_eth[i].bidPrice > 0
+          ) {
             //binanceSchema = new PairInfo();
             binanceSchema = {};
             binanceSchema._id = uuid.v1();
@@ -61,18 +72,34 @@ const getBinanceNewData = (guid) => {
         });
 
         for (i in res_btc_eth) {
-          var btc_eth_capraz_ask = Number(parseFloat(res_btc_eth[i].askPrice).toFixed(13));
-          var btc_eth_capraz_bid = Number(parseFloat(res_btc_eth[i].bidPrice).toFixed(13));
+          var btc_eth_capraz_ask = Number(
+            parseFloat(res_btc_eth[i].askPrice).toFixed(13)
+          );
+          var btc_eth_capraz_bid = Number(
+            parseFloat(res_btc_eth[i].bidPrice).toFixed(13)
+          );
         }
 
         for (i in res_btc) {
-          if (res_btc[i].askPrice && res_btc[i].bidPrice) {
+          if (
+            res_btc[i].askPrice &&
+            res_btc[i].bidPrice &&
+            res_btc[i].askPrice > 0 &&
+            res_btc[i].bidPrice > 0
+          ) {
             //binanceSchema = new PairInfo();
             binanceSchema = {};
             binanceSchema._id = uuid.v1();
-            binanceSchema.parity = res_btc[i].symbol.replace(new RegExp("BTC" + '$'), 'ETH');
-            binanceSchema.buy = toFixed(res_btc[i].askPrice / btc_eth_capraz_bid); // Number(parseFloat(res_btc[i].askPrice / btc_eth_capraz_bid).toFixed(10));
-            binanceSchema.sell = toFixed(res_btc[i].bidPrice / btc_eth_capraz_ask); //Number(parseFloat(res_btc[i].bidPrice / btc_eth_capraz_ask).toFixed(10));
+            binanceSchema.parity = res_btc[i].symbol.replace(
+              new RegExp("BTC" + "$"),
+              "ETH"
+            );
+            binanceSchema.buy = toFixed(
+              res_btc[i].askPrice / btc_eth_capraz_bid
+            ); // Number(parseFloat(res_btc[i].askPrice / btc_eth_capraz_bid).toFixed(10));
+            binanceSchema.sell = toFixed(
+              res_btc[i].bidPrice / btc_eth_capraz_ask
+            ); //Number(parseFloat(res_btc[i].bidPrice / btc_eth_capraz_ask).toFixed(10));
             binanceSchema.hambuy = toFixed(res_btc[i].askPrice); //Number(parseFloat(res_btc[i].askPrice).toFixed(10));
             binanceSchema.hamsell = toFixed(res_btc[i].bidPrice); //Number(parseFloat(res_btc[i].bidPrice).toFixed(10));
             binanceSchema.caprazbuy = btc_eth_capraz_ask;
@@ -98,18 +125,34 @@ const getBinanceNewData = (guid) => {
         });
 
         for (i in res_usdt_eth) {
-          var usdt_eth_capraz_ask = Number(parseFloat(res_usdt_eth[i].askPrice).toFixed(13));
-          var usdt_eth_capraz_bid = Number(parseFloat(res_usdt_eth[i].bidPrice).toFixed(13));
+          var usdt_eth_capraz_ask = Number(
+            parseFloat(res_usdt_eth[i].askPrice).toFixed(13)
+          );
+          var usdt_eth_capraz_bid = Number(
+            parseFloat(res_usdt_eth[i].bidPrice).toFixed(13)
+          );
         }
 
         for (i in res_usdt) {
-          if (res_usdt[i].askPrice && res_usdt[i].bidPrice) {
+          if (
+            res_usdt[i].askPrice &&
+            res_usdt[i].bidPrice &&
+            res_usdt[i].askPrice > 0 &&
+            res_usdt[i].bidPrice > 0
+          ) {
             //binanceSchema = new PairInfo();
             binanceSchema = {};
-            binanceSchema._id = uuid.v1();                       
-            binanceSchema.parity = res_usdt[i].symbol.replace(new RegExp("USDT" + '$'), 'ETH');
-            binanceSchema.buy = toFixed(res_usdt[i].askPrice / usdt_eth_capraz_bid); //Number(parseFloat(res_usdt[i].askPrice/ usdt_eth_capraz_bid).toFixed(10));
-            binanceSchema.sell = toFixed(res_usdt[i].bidPrice / usdt_eth_capraz_ask); //Number(parseFloat(res_usdt[i].bidPrice/ usdt_eth_capraz_ask).toFixed(10));
+            binanceSchema._id = uuid.v1();
+            binanceSchema.parity = res_usdt[i].symbol.replace(
+              new RegExp("USDT" + "$"),
+              "ETH"
+            );
+            binanceSchema.buy = toFixed(
+              res_usdt[i].askPrice / usdt_eth_capraz_bid
+            ); //Number(parseFloat(res_usdt[i].askPrice/ usdt_eth_capraz_bid).toFixed(10));
+            binanceSchema.sell = toFixed(
+              res_usdt[i].bidPrice / usdt_eth_capraz_ask
+            ); //Number(parseFloat(res_usdt[i].bidPrice/ usdt_eth_capraz_ask).toFixed(10));
             binanceSchema.hambuy = toFixed(res_usdt[i].askPrice); //Number(parseFloat(res_usdt[i].askPrice).toFixed(10));
             binanceSchema.hamsell = toFixed(res_usdt[i].bidPrice); //Number(parseFloat(res_usdt[i].bidPrice).toFixed(10));
             binanceSchema.caprazbuy = usdt_eth_capraz_ask;
@@ -126,7 +169,10 @@ const getBinanceNewData = (guid) => {
         resolve(binanceSchemas);
       })
       .catch((error) => {
-        logger.log('info', `${guid} | ${new Date().toISOString()} | BINANCE error | + ${error}`);
+        logger.log(
+          "info",
+          `${guid} | ${new Date().toISOString()} | BINANCE error | + ${error}`
+        );
         reject("binance err: " + error);
       });
   });
