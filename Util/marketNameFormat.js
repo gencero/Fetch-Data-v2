@@ -17,7 +17,7 @@ function bittrexNameFormat(str) {
 function kucoinNameFormat(str) {
   var n = str.indexOf("-");
   var str2 = str.substr(0, n);
-  var str = str2 + "ETH";
+  var str = str2;
 
   return str;
 }

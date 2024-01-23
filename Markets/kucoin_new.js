@@ -24,19 +24,34 @@ const getKucoinData = (guid) => {
           return item.symbol.includes("-ETH");
         });
 
+        const res_eth_usdt = res.filter((item) => { 
+          if (item.symbol === "ETH-USDT") {
+            return item.symbol.includes("ETHUSDT");
+          }
+        });
+
+        for (i in res_eth_usdt) {
+          var eth_usdt_capraz_ask = Number(
+            parseFloat(res_eth_usdt[i].sell).toFixed(13)
+          );
+
+          var eth_usdt_capraz_bid = Number(
+            parseFloat(res_eth_usdt[i].buy).toFixed(13)
+          );
+        }
+
         var kucoinSchema, kucoinSchemas = [];
         for (i in res_eth) {
           if (res_eth[i].sell && res_eth[i].buy) {
-            //kucoinSchema = new PairInfo();
             kucoinSchema = {};
             kucoinSchema._id = uuid.v1();  
             kucoinSchema.parity = kucoinNameFormat(res_eth[i].symbol);
-            kucoinSchema.buy = toFixed(res_eth[i].sell); //Number(parseFloat(res_eth[i].askPrice).toFixed(10));
-            kucoinSchema.sell = toFixed(res_eth[i].buy); //Number(parseFloat(res_eth[i].bidPrice).toFixed(10));
-            kucoinSchema.hambuy = 0;
-            kucoinSchema.hamsell = 0;
-            kucoinSchema.caprazbuy = 0;
-            kucoinSchema.caprazsell = 0;
+            kucoinSchema.buy = toFixed(res_eth[i].sell * eth_usdt_capraz_ask); //Number(parseFloat(res_eth[i].askPrice).toFixed(10));
+            kucoinSchema.sell = toFixed(res_eth[i].buy * eth_usdt_capraz_bid); //Number(parseFloat(res_eth[i].bidPrice).toFixed(10));
+            kucoinSchema.hambuy = toFixed(res_eth[i].sell);
+            kucoinSchema.hamsell = toFixed(res_eth[i].buy);
+            kucoinSchema.caprazbuy = eth_usdt_capraz_ask;
+            kucoinSchema.caprazsell = eth_usdt_capraz_bid;
             kucoinSchema.base = "";
             kucoinSchema.market = "Ku";
             kucoinSchema.contractaddress = "";
@@ -48,17 +63,21 @@ const getKucoinData = (guid) => {
         /**********************************************************************/
         //BTC Çevrim faktörüne göre
         /**********************************************************************/
-        const res_btc_eth = res.filter((item) => {
-          return item.symbol.includes("ETH-BTC");
+        const res_btc_usdt = res.filter((item) => {
+          if (item.symbol === "BTC-USDT") {
+            return item.symbol.includes("BTC-USDT");
+          }
         });
 
-        for (i in res_btc_eth) {
-          var btc_eth_capraz_ask = Number(parseFloat(res_btc_eth[i].sell).toFixed(13));
-          var btc_eth_capraz_bid = Number(parseFloat(res_btc_eth[i].buy).toFixed(13));
+        for (i in res_btc_usdt) {
+          var btc_usdt_capraz_ask = Number(parseFloat(res_btc_usdt[i].sell).toFixed(13));
+          var btc_usdt_capraz_bid = Number(parseFloat(res_btc_usdt[i].buy).toFixed(13));
         }
 
         const res_btc = res.filter((item) => {
-          return item.symbol.includes("-BTC");
+          if (item.symbol.substr(item.symbol.length - 4) === "-BTC") {
+            return item.symbol.includes("-BTC");
+          }
         });
 
         for (i in res_btc) {
@@ -67,12 +86,12 @@ const getKucoinData = (guid) => {
             kucoinBtcSchema = {};
             kucoinBtcSchema._id = uuid.v1();  
             kucoinBtcSchema.parity = kucoinNameFormat(res_btc[i].symbol);
-            kucoinBtcSchema.buy = toFixed(res_btc[i].sell / btc_eth_capraz_bid); //Number(parseFloat(res_btc[i].Ask / btc_eth_capraz_bid).toFixed(10));
-            kucoinBtcSchema.sell = toFixed(res_btc[i].buy / btc_eth_capraz_ask); //Number(parseFloat(res_btc[i].Bid / btc_eth_capraz_ask).toFixed(10));
+            kucoinBtcSchema.buy = toFixed(res_btc[i].sell * btc_usdt_capraz_bid); //Number(parseFloat(res_btc[i].Ask / btc_eth_capraz_bid).toFixed(10));
+            kucoinBtcSchema.sell = toFixed(res_btc[i].buy * btc_usdt_capraz_ask); //Number(parseFloat(res_btc[i].Bid / btc_eth_capraz_ask).toFixed(10));
             kucoinBtcSchema.hambuy = toFixed(res_btc[i].sell); //Number(parseFloat(res_btc[i].Ask).toFixed(10));
             kucoinBtcSchema.hamsell = toFixed(res_btc[i].buy); //Number(parseFloat(res_btc[i].Bid).toFixed(10));
-            kucoinBtcSchema.caprazbuy = btc_eth_capraz_bid;
-            kucoinBtcSchema.caprazsell = btc_eth_capraz_ask;
+            kucoinBtcSchema.caprazbuy = btc_usdt_capraz_bid;
+            kucoinBtcSchema.caprazsell = btc_usdt_capraz_ask;
             kucoinBtcSchema.base = "BTC";
             kucoinBtcSchema.market = "Ku";
             kucoinBtcSchema.contractaddress = "";
@@ -84,17 +103,19 @@ const getKucoinData = (guid) => {
         /**********************************************************************/
         //USDT çevrim faktörüne göre
         /**********************************************************************/
-        const res_usdt_eth = res.filter((item) => {
-          return item.symbol.includes("ETH-USDT");
-        });
+        // const res_usdt_eth = res.filter((item) => {
+        //   return item.symbol.includes("ETH-USDT");
+        // });
 
-        for (i in res_usdt_eth) {
-          var usdt_eth_capraz_ask = Number(parseFloat(res_usdt_eth[i].sell).toFixed(13));
-          var usdt_eth_capraz_bid = Number(parseFloat(res_usdt_eth[i].buy).toFixed(13));
-        }
+        // for (i in res_usdt_eth) {
+        //   var usdt_eth_capraz_ask = Number(parseFloat(res_usdt_eth[i].sell).toFixed(13));
+        //   var usdt_eth_capraz_bid = Number(parseFloat(res_usdt_eth[i].buy).toFixed(13));
+        // }
 
         const res_usdt = res.filter((item) => {
-          return item.symbol.includes("-USDT");
+          if (item.symbol.substr(item.symbol.length - 5) === "-USDT") {
+            return item.symbol.includes("-USDT");
+          }
         });
 
         for (i in res_usdt) {
@@ -103,12 +124,12 @@ const getKucoinData = (guid) => {
             kucoinUsdtSchema = {};
             kucoinUsdtSchema._id = uuid.v1();  
             kucoinUsdtSchema.parity = kucoinNameFormat(res_usdt[i].symbol);
-            kucoinUsdtSchema.buy = toFixed(res_usdt[i].sell / usdt_eth_capraz_bid); //Number(parseFloat(res_usdt[i].Ask / usdt_eth_capraz_bid).toFixed(10));
-            kucoinUsdtSchema.sell = toFixed(res_usdt[i].buy / usdt_eth_capraz_ask); //Number(parseFloat(res_usdt[i].Bid / usdt_eth_capraz_ask).toFixed(10));
-            kucoinUsdtSchema.hambuy = toFixed(res_usdt[i].sell); //Number(parseFloat(res_usdt[i].Ask).toFixed(10));
-            kucoinUsdtSchema.hamsell = toFixed(res_usdt[i].buy); //Number(parseFloat(res_usdt[i].Bid).toFixed(10));
-            kucoinUsdtSchema.caprazbuy = usdt_eth_capraz_bid;
-            kucoinUsdtSchema.caprazsell = usdt_eth_capraz_ask;
+            kucoinUsdtSchema.buy = toFixed(res_usdt[i].sell); //Number(parseFloat(res_usdt[i].Ask / usdt_eth_capraz_bid).toFixed(10));
+            kucoinUsdtSchema.sell = toFixed(res_usdt[i].buy); //Number(parseFloat(res_usdt[i].Bid / usdt_eth_capraz_ask).toFixed(10));
+            kucoinUsdtSchema.hambuy = 0; //Number(parseFloat(res_usdt[i].Ask).toFixed(10));
+            kucoinUsdtSchema.hamsell = 0; //Number(parseFloat(res_usdt[i].Bid).toFixed(10));
+            kucoinUsdtSchema.caprazbuy = 0;
+            kucoinUsdtSchema.caprazsell = 0;
             kucoinUsdtSchema.base = "USDT";
             kucoinUsdtSchema.market = "Ku";
             kucoinUsdtSchema.contractaddress = "";
