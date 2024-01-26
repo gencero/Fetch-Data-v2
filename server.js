@@ -23,6 +23,9 @@ const deleteArbitrageSenkron = require("./Markets/delete_arbitrage_senkron.js");
 const getOkexSenkron = require("./Markets/okex_senkron.js");
 const getMexcSenkron = require("./Markets/mexc_senkron.js");
 const getChilizSenkron = require("./Markets/chiliz_senkron.js");
+const getBybitSenkron = require("./Markets/bybit_senkron.js");
+const getKrakenSenkron = require("./Markets/kraken_senkron.js");
+const getParibuSenkron = require("./Markets/paribu_senkron.js");
 //const getPancakeNodeBlock = require("./Markets/pancake_node.js");
 
 getBinanceSenkron();
@@ -47,6 +50,9 @@ getBalancer_Block();
 getOkexSenkron();
 getMexcSenkron();
 getChilizSenkron();
+getBybitSenkron();
+getKrakenSenkron();
+getParibuSenkron();
 
 //console.log('100' + Math.random().toString().slice(2,6));
 
