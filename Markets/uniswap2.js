@@ -11,13 +11,14 @@ async function getUniswap3Data(guid, url) {
   try {
     logger.log(
       "info",
-      `${guid} | ${new Date().toISOString()} | UNISWAP-3 started`
+      `${guid} | ${new Date().toISOString()} | UNISWAP-2 started`
     );
     console.log("url: " + url);
     return new Promise((resolve, reject) => {
       axios
         .get(url, { timeout: 8000 })
         .then((response) => {
+          console.log("response: " + JSON.stringify(response.data));
           var res = response.data.map(
             ({ symbol, address, ethToTokenPrice, tokenToEthPrice }) => ({
               symbol,
@@ -29,7 +30,7 @@ async function getUniswap3Data(guid, url) {
 
           logger.log(
             "info",
-            `${guid} | ${new Date().toISOString()} | UNISWAP-3 response | data.length: ${
+            `${guid} | ${new Date().toISOString()} | UNISWAP-2 response | data.length: ${
               response.data.length
             }`
           );
@@ -59,6 +60,8 @@ async function getUniswap3Data(guid, url) {
                   var lowestAsk = 1 / ethToTokenPrice;
                 }
 
+                // ethusdt fiyatını bulup 1/tokenToEthPrice yerine ethusdt/tokenToEthPrice yapabiliriz.
+                // ya da yine highestBid bu şekilde buluruz. bunu ethusdt fiyatı ile çarparız.
                 if (res[i].tokenToEthPrice < 0) {
                   tokenToEthPrice = 0; //-1 * res[i].tokenToEthPrice;
                   var highestBid = 0;
@@ -79,7 +82,7 @@ async function getUniswap3Data(guid, url) {
                 uniswap3Schema.caprazsell = 0;
                 uniswap3Schema.base = "";
                 uniswap3Schema.contractaddress = res[i].address;
-                uniswap3Schema.market = "Uniswap-3";
+                uniswap3Schema.market = "Uniswap-2";
 
                 uniswap3Schemas.push(uniswap3Schema);
               }
@@ -90,15 +93,15 @@ async function getUniswap3Data(guid, url) {
         .catch((error) => {
           logger.log(
             "info",
-            `${guid} | ${new Date().toISOString()} | ORHAN UNISWAP-3 error | + ${error}`
+            `${guid} | ${new Date().toISOString()} | ORHAN UNISWAP-2 error | + ${error}`
           );
-          reject("XXXXX UNISWAP-3 ERR: " + error);
+          reject("XXXXX UNISWAP-2 ERR: " + error);
         });
     });
   } catch (error) {
     logger.log(
       "info",
-      `${guid} | ${new Date().toISOString()} | UNISWAP-3 error | + ${error}`
+      `${guid} | ${new Date().toISOString()} | UNISWAP-2 error | + ${error}`
     );
   }
 }

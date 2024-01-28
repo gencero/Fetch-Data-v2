@@ -2,7 +2,7 @@ const pool = require("../DB/Connection2");
 const logger = require("../logger");
 
 async function uniswap3_upsert(marketsSchemas, guid) {
-  logger.log('info', `${guid} | ${new Date().toISOString()} | UNISWAP-3 Upsert started`);
+  logger.log('info', `${guid} | ${new Date().toISOString()} | UNISWAP-2 Upsert started`);
 
   const query1 = `
   insert into pairinfos
@@ -38,16 +38,16 @@ async function uniswap3_upsert(marketsSchemas, guid) {
 //                 SET multiple = true
 //               WHERE parity IN (SELECT parity 
 //                                  FROM pairinfos 
-//                                 WHERE market = 'Uniswap-3' 
+//                                 WHERE market = 'Uniswap-2' 
 //                                 GROUP by parity 
 //                                HAVING count(*)>1)
-//                 AND market = 'Uniswap-3'`; 
+//                 AND market = 'Uniswap-2'`; 
   //const client = await pool.connect();
   const response = await pool.query(query1, async(err, result) => {
     if (err){
       //client.release(); 
       console.log(err);
-      logger.log('info', `${guid} | ${new Date().toISOString()} | UNISWAP-3 Upsert 1 ERROR: ${err}` );
+      logger.log('info', `${guid} | ${new Date().toISOString()} | UNISWAP-2 Upsert 1 ERROR: ${err}` );
     }  
   });
 
@@ -55,12 +55,12 @@ async function uniswap3_upsert(marketsSchemas, guid) {
   //   if (err){
   //     //client.release(); 
   //     console.log(err);
-  //     logger.log('info', `${guid} | ${new Date().toISOString()} | UNISWAP-3 Upsert 2 ERROR: ${err}` ); 
+  //     logger.log('info', `${guid} | ${new Date().toISOString()} | UNISWAP-2 Upsert 2 ERROR: ${err}` ); 
   //   }
   // });
 
   //client.release();  
-  logger.log('info', `${guid} | ${new Date().toISOString()} | UNISWAP-3 ended`);
+  logger.log('info', `${guid} | ${new Date().toISOString()} | UNISWAP-2 ended`);
 };
 
 module.exports = uniswap3_upsert;

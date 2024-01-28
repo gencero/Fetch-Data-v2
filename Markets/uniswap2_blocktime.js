@@ -1,9 +1,9 @@
 const Web3 = require("web3");
-const getUniswap3Data = require("./uniswap3.js");
-const uniswap3_upsert = require("./uniswap3_upsert.js");
-const logger = require("../logger");
+const getUniswap3Data = require("./uniswap2.js");
+const uniswap3_upsert = require("./uniswap2_upsert.js");
+const logger = require("../logger.js");
 var uuid = require("node-uuid");
-const pool = require("../DB/Connection2");
+const pool = require("../DB/Connection2.js");
 
 async function getUniswap3_Block() {
   let wssUrl = "";
@@ -12,7 +12,7 @@ async function getUniswap3_Block() {
                           WHEN linkselect='2' THEN wsslink_2
                           ELSE wsslink_3
                         END AS wssurl
-                  FROM runningexchanges WHERE market = 'Uniswap-3' `;
+                  FROM runningexchanges WHERE market = 'Uniswap-2' `;
 
   //const client = await pool.connect();
   const response = await pool.query(query, async (err, result) => {
@@ -20,7 +20,7 @@ async function getUniswap3_Block() {
       console.log(err);
       logger.log(
         "info",
-        `${guid} | ${new Date().toISOString()} | UNISWAP-3 Upsert ERROR: ${err}`
+        `${guid} | ${new Date().toISOString()} | UNISWAP-2 Upsert ERROR: ${err}`
       );
     }
     this.wssUrl = result.rows[0].wssurl;
@@ -36,7 +36,7 @@ async function getUniswap3_Block() {
       .on("connected", () =>
         logger.log(
           "info",
-          `${new Date().toISOString()} | UNISWAP-3 Connected to eth node, waiting for block`
+          `${new Date().toISOString()} | UNISWAP-2 Connected to eth node, waiting for block`
         )
       )
       .on("data", fetchData)
@@ -58,7 +58,7 @@ async function getUniswap3_Block() {
                           END AS exchangeurl,
                           active
                       FROM runningexchanges 
-                     WHERE market = 'Uniswap-3' `;
+                     WHERE market = 'Uniswap-2' `;
 
     //const client = await pool.connect();
     const response = await pool.query(query, async (err, result) => {
@@ -66,7 +66,7 @@ async function getUniswap3_Block() {
         console.log(err);
         logger.log(
           "info",
-          `${guid} | ${new Date().toISOString()} | UNISWAP-3 Upsert ERROR: ${err}`
+          `${guid} | ${new Date().toISOString()} | UNISWAP-2 Upsert ERROR: ${err}`
         );
       } else {
         var exchangeUrl = result.rows[0].exchangeurl;
@@ -76,7 +76,7 @@ async function getUniswap3_Block() {
           var guid = await uuid.v1();
           logger.log(
             "info",
-            `${guid} | ${new Date().toISOString()} | UNISWAP-3 Block ${
+            `${guid} | ${new Date().toISOString()} | UNISWAP-2 Block ${
               block.number
             } recieved, loading new data`
           );
@@ -84,7 +84,7 @@ async function getUniswap3_Block() {
         } else {
           logger.log(
             "info",
-            `${new Date().toISOString()} | UNISWAP-3 deactivated`
+            `${new Date().toISOString()} | UNISWAP-2 deactivated`
           );
         }
       }
