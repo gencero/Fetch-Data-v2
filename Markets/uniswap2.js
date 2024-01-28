@@ -18,7 +18,7 @@ async function getUniswap3Data(guid, url) {
       axios
         .get(url, { timeout: 8000 })
         .then((response) => {
-          console.log("response: " + JSON.stringify(response.data));
+          // console.log("response: " + JSON.stringify(response.data));
           var res = response.data.map(
             ({ symbol, address, ethToTokenPrice, tokenToEthPrice }) => ({
               symbol,
