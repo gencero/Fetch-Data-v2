@@ -1,8 +1,8 @@
 const pool = require("../DB/Connection2");
 const logger = require("../logger");
 
-async function uniswap2_upsert(marketsSchemas, guid) {
-  logger.log('info', `${guid} | ${new Date().toISOString()} | UNISWAP-2 Upsert started`);
+async function uniswap3_upsert(marketsSchemas, guid) {
+  logger.log('info', `${guid} | ${new Date().toISOString()} | UNISWAP-3 Upsert started`);
 
   const query1 = `
   insert into pairinfos
@@ -47,20 +47,12 @@ async function uniswap2_upsert(marketsSchemas, guid) {
     if (err){
       //client.release(); 
       console.log(err);
-      logger.log('info', `${guid} | ${new Date().toISOString()} | UNISWAP-2 Upsert 1 ERROR: ${err}` );
+      logger.log('info', `${guid} | ${new Date().toISOString()} | UNISWAP-3 Upsert 1 ERROR: ${err}` );
     }  
   });
 
-  // const response2 = await pool.query(query2, (err, result2) => {
-  //   if (err){
-  //     //client.release(); 
-  //     console.log(err);
-  //     logger.log('info', `${guid} | ${new Date().toISOString()} | UNISWAP-2 Upsert 2 ERROR: ${err}` ); 
-  //   }
-  // });
-
   //client.release();  
-  logger.log('info', `${guid} | ${new Date().toISOString()} | UNISWAP-2 ended`);
+  logger.log('info', `${guid} | ${new Date().toISOString()} | UNISWAP-3 ended`);
 };
 
-module.exports = uniswap2_upsert;
+module.exports = uniswap3_upsert;

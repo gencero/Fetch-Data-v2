@@ -26,33 +26,36 @@ const getChilizSenkron = require("./Markets/chiliz_senkron.js");
 const getBybitSenkron = require("./Markets/bybit_senkron.js");
 const getKrakenSenkron = require("./Markets/kraken_senkron.js");
 const getParibuSenkron = require("./Markets/paribu_senkron.js");
+const getUniswapV3_Block = require("./Markets/uniswap_v3_blocktime.js");
 //const getPancakeNodeBlock = require("./Markets/pancake_node.js");
 
 getBinanceSenkron();
-//getBittrexSenkron();
-//getIdexSenkron();
 getKucoinSenkron();
 getHuobiSenkron();
 getBitmaxSenkron();
 getGateSenkron();
 getOneinch_Block();
-//getKyber_Block();
 getUniswap2_Block();
 getUniswap1_Block();
-//getPoloniexSenkron();
 getBitfinexSenkron();
 getArbitrageNewSenkron();
 deleteArbitrageSenkron();
 getBalancer_Block();
-//getSushiswap_Block();
-//getFtxSenkron();
-//getPancakeNodeBlock();
 getOkexSenkron();
 getMexcSenkron();
 getChilizSenkron();
 getBybitSenkron();
 getKrakenSenkron();
 getParibuSenkron();
+getUniswapV3_Block();
+
+//getBittrexSenkron();
+//getIdexSenkron();
+//getKyber_Block();
+//getPoloniexSenkron();
+//getSushiswap_Block();
+//getFtxSenkron();
+//getPancakeNodeBlock();
 
 //console.log('100' + Math.random().toString().slice(2,6));
 

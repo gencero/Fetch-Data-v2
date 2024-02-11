@@ -1,27 +1,24 @@
 const Web3 = require("web3");
-const getUniswap2Data = require("./uniswap2.js");
-const uniswap2_upsert = require("./uniswap2_upsert.js");
+const getUniswapV3Data = require("./uniswap_v3.js");
+const uniswap_v3_upsert = require("./uniswap_v3_upsert.js");
 const logger = require("../logger.js");
 var uuid = require("node-uuid");
 const pool = require("../DB/Connection2.js");
 
-async function getUniswap2_Block() {
+async function getUniswapV3_Block() {
   let wssUrl = "";
   var query = `SELECT CASE
                           WHEN linkselect='1' THEN wsslink_1
                           WHEN linkselect='2' THEN wsslink_2
                           ELSE wsslink_3
                         END AS wssurl
-                  FROM runningexchanges WHERE market = 'Uniswap-2' `;
+                  FROM runningexchanges WHERE market = 'Uniswap-3' `;
 
   //const client = await pool.connect();
   const response = await pool.query(query, async (err, result) => {
     if (err) {
       console.log(err);
-      logger.log(
-        "info",
-        `${guid} | ${new Date().toISOString()} | UNISWAP-2 Upsert ERROR: ${err}`
-      );
+      logger.log("info",`${guid} | ${new Date().toISOString()} | UNISWAP-V3 Upsert ERROR: ${err}`);
     }
     this.wssUrl = result.rows[0].wssurl;
 
@@ -34,10 +31,7 @@ async function getUniswap2_Block() {
     web3.eth
       .subscribe("newBlockHeaders")
       .on("connected", () =>
-        logger.log(
-          "info",
-          `${new Date().toISOString()} | UNISWAP-2 Connected to eth node, waiting for block`
-        )
+        logger.log("info",`${new Date().toISOString()} | UNISWAP-V3 Connected to eth node, waiting for block`)
       )
       .on("data", fetchData)
       .on("error", console.error);
@@ -45,9 +39,11 @@ async function getUniswap2_Block() {
 
   //client.release();
 
-  async function fetch(guid, urlUniswap2) {
-    var result = await getUniswap2Data(guid, urlUniswap2);
-    var upsert = await uniswap2_upsert(result, guid);
+  async function fetch(guid, urlUniswap3) {
+    var result = await getUniswapV3Data(guid, urlUniswap3);
+    if (result.length > 0){
+        var upsert = await uniswap_v3_upsert(result, guid);
+    }
   }
 
   async function fetchData(block) {
@@ -58,34 +54,25 @@ async function getUniswap2_Block() {
                           END AS exchangeurl,
                           active
                       FROM runningexchanges 
-                     WHERE market = 'Uniswap-2' `;
+                     WHERE market = 'Uniswap-3' `;
 
     //const client = await pool.connect();
     const response = await pool.query(query, async (err, result) => {
       if (err) {
         console.log(err);
-        logger.log(
-          "info",
-          `${guid} | ${new Date().toISOString()} | UNISWAP-2 Upsert ERROR: ${err}`
-        );
+        logger.log("info",`${guid} | ${new Date().toISOString()} | UNISWAP-V3 Upsert ERROR: ${err}`);
       } else {
         var exchangeUrl = result.rows[0].exchangeurl;
         var active = result.rows[0].active;
 
+        //console.log("exchangeUrl: " + exchangeUrl);
+
         if (active == true) {
           var guid = await uuid.v1();
-          logger.log(
-            "info",
-            `${guid} | ${new Date().toISOString()} | UNISWAP-2 Block ${
-              block.number
-            } recieved, loading new data`
-          );
+          logger.log("info",`${guid} | ${new Date().toISOString()} | UNISWAP-V3 Block ${block.number} recieved, loading new data`);
           await fetch(guid, exchangeUrl);
         } else {
-          logger.log(
-            "info",
-            `${new Date().toISOString()} | UNISWAP-2 deactivated`
-          );
+          logger.log("info",`${new Date().toISOString()} | UNISWAP-V3 deactivated`);
         }
       }
     });
@@ -93,4 +80,4 @@ async function getUniswap2_Block() {
   }
 }
 
-module.exports = getUniswap2_Block;
+module.exports = getUniswapV3_Block;
