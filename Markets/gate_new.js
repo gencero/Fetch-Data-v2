@@ -2,7 +2,8 @@ const axios = require("axios");
 var uuid = require("node-uuid");
 const toFixed = require("../Util/toFixed");
 const logger = require("../logger");
-const url = "https://data.gateio.co/api2/1/tickers";
+//const url = "https://data.gateio.co/api2/1/tickers";
+const url = "https://api.gateio.ws/api/v4/spot/tickers";
 
 const getGateNewData = (guid) => {
   logger.log('info', `${guid} | ${new Date().toISOString()} | GATE started`);
