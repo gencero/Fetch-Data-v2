@@ -11,114 +11,143 @@ const getGateNewData = (guid) => {
     axios
       .get(url, { timeout: 1750 })
       .then((response) => {
-        var obj = response.data;
-        logger.log('info', `${guid} | ${new Date().toISOString()} | GATE response | data.length: ${Object.keys(obj).length}`);
+        var res = response.data.map(({ currency_pair, lowest_ask, highest_bid }) => ({
+          currency_pair,
+          lowest_ask,
+          highest_bid,
+        }));
 
-        for (const prop in obj){
-            var upperProp = prop.toUpperCase();
+        logger.log('info', `${guid} | ${new Date().toISOString()} | GATE response | data.length: ${response.data.length}`);
 
-            // if (upperProp === "ETH_BTC"){
-            //     var btc_eth_capraz_ask = Number(parseFloat(obj[prop].lowestAsk).toFixed(13));
-            //     var btc_eth_capraz_bid = Number(parseFloat(obj[prop].highestBid).toFixed(13));
-            // }   
+        /**********************************************************************/
+        //ETH olanları aldık.
+        /**********************************************************************/
+        const res_eth = res.filter((item) => {
+          if (item.currency_pair.substr(item.currency_pair.length - 3) === "ETH") {
+            return item.currency_pair.includes("ETH");
+          }
+        });
 
-            if (upperProp === "BTC_USDT"){
-                var btc_usdt_capraz_ask = Number(parseFloat(obj[prop].lowestAsk).toFixed(13));
-                var btc_usdt_capraz_bid = Number(parseFloat(obj[prop].highestBid).toFixed(13));
-            } 
+        const res_eth_usdt = res.filter((item) => { 
+          if (item.currency_pair === "ETH_USDT") {
+            return item.currency_pair.includes("ETH_USDT");
+          }
+        });
 
-            if (upperProp === "ETH_USDT"){
-                //var usdt_eth_capraz_ask = Number(parseFloat(obj[prop].lowestAsk).toFixed(13));
-                //var usdt_eth_capraz_bid = Number(parseFloat(obj[prop].highestBid).toFixed(13));
-                var eth_usdt_capraz_ask = Number(parseFloat(obj[prop].lowestAsk).toFixed(13));
-                var eth_usdt_capraz_bid = Number(parseFloat(obj[prop].highestBid).toFixed(13));
-            }
+        for (i in res_eth_usdt) {
+          var eth_usdt_capraz_ask = Number(
+            parseFloat(res_eth_usdt[i].lowest_ask).toFixed(13)
+          );
+
+          var eth_usdt_capraz_bid = Number(
+            parseFloat(res_eth_usdt[i].highest_bid).toFixed(13)
+          );
         }
-        
+
         var gateSchema, gateSchemas = [];
-        for (const prop in obj) {
-            var upperProp = prop.toUpperCase();
+        for (i in res_eth) {
+          if (
+            res_eth[i].lowest_ask &&
+            res_eth[i].highest_bid &&
+            res_eth[i].lowest_ask > 0 &&
+            res_eth[i].highest_bid > 0
+          ) {
+            gateSchema = {};
+            gateSchema._id = uuid.v1();
+            gateSchema.parity = res_eth[i].currency_pair.replace("_", "").slice(0, -3);
+            gateSchema.buy = toFixed(res_eth[i].lowest_ask * eth_usdt_capraz_ask); //Number(parseFloat(res_eth[i].askPrice).toFixed(10));
+            gateSchema.sell = toFixed(res_eth[i].highest_bid * eth_usdt_capraz_bid); //Number(parseFloat(res_eth[i].bidPrice).toFixed(10));
+            gateSchema.hambuy = toFixed(res_eth[i].lowest_ask);
+            gateSchema.hamsell = toFixed(res_eth[i].highest_bid);
+            gateSchema.caprazbuy = eth_usdt_capraz_ask;
+            gateSchema.caprazsell = eth_usdt_capraz_bid;
+            gateSchema.base = "";
+            gateSchema.market = "Gate";
+            gateSchema.contractaddress = "";
 
-          if (upperProp.includes("_ETH")) {
-            if (obj[prop].highestBid && obj[prop].lowestAsk) {
-                //gateSchema = new PairInfo();
-                gateSchema = {};
-                gateSchema._id = uuid.v1();    
-                gateSchema.parity = upperProp.replace("_", "").slice(0, -3);
-                //gateSchema.sell = obj[prop].highestBid;
-                //gateSchema.buy = obj[prop].lowestAsk;
-                //gateSchema.hamsell = 0;
-                //gateSchema.hambuy = 0;
-                //gateSchema.caprazbuy = 0;
-                //gateSchema.caprazsell = 0;
-                gateSchema.sell = toFixed(obj[prop].highestBid * eth_usdt_capraz_bid);
-                gateSchema.buy = toFixed(obj[prop].lowestAsk * eth_usdt_capraz_ask) ;
-                gateSchema.hamsell = toFixed(obj[prop].highestBid);
-                gateSchema.hambuy = toFixed(obj[prop].lowestAsk);
-                gateSchema.caprazbuy = eth_usdt_capraz_ask;
-                gateSchema.caprazsell = eth_usdt_capraz_bid;
-                gateSchema.base = "";
-                gateSchema.market = "Gate";
-                gateSchema.contractaddress = "";
-
-                gateSchemas.push(gateSchema);
-            }
+            gateSchemas.push(gateSchema);
           }
+        }
 
-          if (upperProp.includes("_BTC")) {
-            if (obj[prop].highestBid && obj[prop].lowestAsk) {
-                //upperProp = upperProp.replace(new RegExp("BTC" + '$'), "ETH");
-                //gateSchema = new PairInfo();
-                gateSchema = {};
-                gateSchema._id = uuid.v1();    
-                // gateSchema.parity = upperProp.replace("_", "");
-                // gateSchema.sell = toFixed(obj[prop].highestBid / btc_eth_capraz_ask);
-                // gateSchema.buy = toFixed(obj[prop].lowestAsk / btc_eth_capraz_bid);
-                // gateSchema.hamsell = toFixed(obj[prop].highestBid);
-                // gateSchema.hambuy = toFixed(obj[prop].lowestAsk);
-                // gateSchema.caprazbuy = btc_eth_capraz_ask;
-                // gateSchema.caprazsell = btc_eth_capraz_bid;
-                gateSchema.parity = upperProp.replace("_", "").slice(0, -3);
-                gateSchema.sell = toFixed(obj[prop].highestBid * btc_usdt_capraz_bid);
-                gateSchema.buy = toFixed(obj[prop].lowestAsk * btc_usdt_capraz_ask);
-                gateSchema.hamsell = toFixed(obj[prop].highestBid);
-                gateSchema.hambuy = toFixed(obj[prop].lowestAsk);
-                gateSchema.caprazbuy = btc_usdt_capraz_ask;
-                gateSchema.caprazsell = btc_usdt_capraz_bid;
-
-                gateSchema.base = "BTC";
-                gateSchema.market = "Gate";
-                gateSchema.contractaddress = "";
-
-                gateSchemas.push(gateSchema);
-            }
+        /**********************************************************************/
+        //BTC Çevrim faktörüne göre
+        /**********************************************************************/
+        const res_btc = res.filter((item) => {
+          if (item.currency_pair.substr(item.currency_pair.length - 3) === "BTC") {
+            return item.currency_pair.includes("BTC");
           }
+        });
 
-          if (upperProp.includes("_USDT")) {
-            if (obj[prop].highestBid && obj[prop].lowestAsk) {
-                //upperProp = upperProp.replace(new RegExp("USDT" + '$'), "ETH");
-                //gateSchema = new PairInfo();
-                gateSchema = {};
-                gateSchema._id = uuid.v1();    
-                gateSchema.parity = upperProp.replace("_", "").slice(0, -4);
-                // gateSchema.sell = toFixed(obj[prop].highestBid / usdt_eth_capraz_ask);
-                // gateSchema.buy = toFixed(obj[prop].lowestAsk / usdt_eth_capraz_bid);
-                // gateSchema.hamsell = toFixed(obj[prop].highestBid);
-                // gateSchema.hambuy = toFixed(obj[prop].lowestAsk);
-                // gateSchema.caprazbuy = usdt_eth_capraz_ask;
-                // gateSchema.caprazsell =usdt_eth_capraz_bid;
-                gateSchema.sell = toFixed(obj[prop].highestBid);
-                gateSchema.buy = toFixed(obj[prop].lowestAsk);
-                gateSchema.hamsell = 0;
-                gateSchema.hambuy = 0;
-                gateSchema.caprazbuy = 0;
-                gateSchema.caprazsell =0;
-                gateSchema.base = "USDT";
-                gateSchema.market = "Gate";
-                gateSchema.contractaddress = "";
+        const res_btc_usdt = res.filter((item) => { 
+          if (item.currency_pair === "BTC_USDT") {
+            return item.currency_pair.includes("BTC_USDT");
+          }
+        });
 
-                gateSchemas.push(gateSchema);
-            }
+        for (i in res_btc_usdt) {
+          var btc_usdt_capraz_ask = Number(
+            parseFloat(res_btc_usdt[i].lowest_ask).toFixed(13)
+          );
+
+          var btc_usdt_capraz_bid = Number(
+            parseFloat(res_btc_usdt[i].highest_bid).toFixed(13)
+          );
+        }
+
+        for (i in res_btc) {
+          if (
+            res_btc[i].lowest_ask &&
+            res_btc[i].highest_bid &&
+            res_btc[i].lowest_ask > 0 &&
+            res_btc[i].highest_bid > 0
+          ) {
+            gateSchema = {};
+            gateSchema._id = uuid.v1();
+            gateSchema.parity = res_btc[i].currency_pair.replace("_", "").replace(new RegExp("BTC" + "$"),"");
+            gateSchema.buy = toFixed(res_btc[i].lowest_ask * btc_usdt_capraz_ask); 
+            gateSchema.sell = toFixed(res_btc[i].highest_bid * btc_usdt_capraz_bid); 
+            gateSchema.hambuy = toFixed(res_btc[i].lowest_ask); 
+            gateSchema.hamsell = toFixed(res_btc[i].highest_bid); 
+            gateSchema.caprazbuy = btc_usdt_capraz_ask;
+            gateSchema.caprazsell = btc_usdt_capraz_bid;
+            gateSchema.base = "BTC";
+            gateSchema.market = "Gate";
+            gateSchema.contractaddress = "";
+
+            gateSchemas.push(gateSchema);
+          }
+        }
+
+        /**********************************************************************/
+        //USDT Çevrim faktörüne göre
+        /**********************************************************************/
+        const res_usdt = res.filter((item) => {
+          if (item.currency_pair.substr(item.currency_pair.length - 4) === "USDT") {
+            return item.currency_pair.includes("USDT");
+          }
+        });
+
+        for (i in res_usdt) {
+          if (
+            res_usdt[i].lowest_ask &&
+            res_usdt[i].highest_bid &&
+            res_usdt[i].lowest_ask > 0 &&
+            res_usdt[i].highest_bid > 0
+          ) {
+            gateSchema = {};
+            gateSchema._id = uuid.v1();
+            gateSchema.parity = res_usdt[i].currency_pair.replace("_", "").replace(new RegExp("USDT" + "$"),"");
+            gateSchema.buy = toFixed(res_usdt[i].lowest_ask); 
+            gateSchema.sell = toFixed(res_usdt[i].highest_bid); 
+            gateSchema.hambuy = 0; 
+            gateSchema.hamsell = 0; 
+            gateSchema.caprazbuy = 0;
+            gateSchema.caprazsell = 0;
+            gateSchema.base = "USDT";
+            gateSchema.market = "Gate";
+            gateSchema.contractaddress = "";
+
+            gateSchemas.push(gateSchema);
           }
         }
 
